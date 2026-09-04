@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes — Daniel Nguyen</title>
+  <meta name="description" content="Short write-ups from a homelab incident log: what broke, what it actually was, what fixed it, and the rule.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side left">
+    <div class="side-stick">
+    <nav class="side-nav" aria-label="Primary">
+      <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>About Me</a>
+      <a href="/#work"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>Work</a>
+      <a href="/#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6 3 12l5 6"/><path d="m16 6 5 6-5 6"/><path d="M14 4l-4 16"/></svg>Projects</a>
+      <a href="notes.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Notes</a>
+      <a href="assets/DanielNguyenResume.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h5M10 17h5"/></svg>CV</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme"><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Dark Mode</span><span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light Mode</span></button>
+    </div>
+  </aside>
+  <div class="card-col">
+    <main class="card">
+      <header class="article-header">
+        <div class="when">From the incident log</div>
+        <div>
+          <h1>Notes</h1>
+          <p class="lede">Every problem on the homelab gets an entry: symptom, cause, fix, rule. Most are three lines. These three earned a few paragraphs, because the interesting part was how I was wrong before I was right.</p>
+        </div>
+      </header>
+
+      <article class="note" id="gpu">
+        <div class="when">2026-08-29</div>
+        <div class="body">
+          <h2>Six weeks of inference on the CPU</h2>
+          <p>Local models on the homelab were slow enough that I'd stopped using them. I had an explanation ready: the GPU has 2 GB of memory, the models want more, so of course it's slow. That explanation was comfortable, it was plausible, and it was wrong for six weeks.</p>
+          <p>What actually happened is that the Compose service for the inference container never declared <code>runtime: nvidia</code>. The Docker daemon had the NVIDIA runtime registered, and I'd verified that, so I assumed containers could use it. They can't. Registering the runtime on the daemon is necessary but not sufficient; each service has to ask for it. The container had never seen the GPU at all.</p>
+          <div class="record">
+            <dl>
+              <dt>symptom</dt>
+              <dd>Local models painfully slow. Assumed the 2 GB GPU was the limit.</dd>
+              <dt>cause</dt>
+              <dd>No <code>runtime: nvidia</code> on the service. The container ran on CPU for six weeks.</dd>
+              <dt>fix</dt>
+              <dd>Add the runtime plus <code>NVIDIA_VISIBLE_DEVICES</code> and <code>NVIDIA_DRIVER_CAPABILITIES</code>. Prompt evaluation went from 77 tokens/s to 730–870.</dd>
+              <dt>rule</dt>
+              <dd>Before blaming hardware, prove the container can see it: <code>docker exec &lt;container&gt; nvidia-smi</code>. Ten seconds.</dd>
+            </dl>
+          </div>
+          <p>The lesson isn't about NVIDIA. It's that a plausible explanation stopped me from running a ten-second check. The thing I'd "verified" was one layer above the thing that mattered. Now, when something is slow, the first question is whether the component can see the resource I think it's using, and the answer has to come from inside the component.</p>
+        </div>
+      </article>
+
+      <article class="note" id="exit-zero">
+        <div class="when">2026-07-28</div>
+        <div class="body">
+          <h2>A clean exit is not the same as working</h2>
+          <p>The game-streaming host died after every reboot. Not crashed: <code>systemctl status</code> said active, running, and also said <em>Tasks: 0</em>. The port it should have been listening on was never bound. I spent the first pass on the video encoder, because that's what streaming services usually break on, and got nowhere.</p>
+          <p>The real cause was ordering. The service starts before the desktop's screen-capture portal is ready, finds nothing to capture, and exits. It exits with code zero. That single fact defeated every recovery mechanism I had, because <code>Restart=on-failure</code> only fires on failure, and nothing had failed as far as systemd could tell.</p>
+          <div class="record">
+            <dl>
+              <dt>symptom</dt>
+              <dd>Service shows running after boot; port never binds; zero tasks.</dd>
+              <dt>cause</dt>
+              <dd>Capture portal not ready at start. The process exits <em>clean</em>, so the restart policy never triggers. Not the encoder.</dd>
+              <dt>fix</dt>
+              <dd>Order the unit after the portal and audio stack, add a start delay, and add a systemd timer that tests whether the port is listening and restarts the unit if not.</dd>
+              <dt>rule</dt>
+              <dd>Check outcomes, not process state. A health check has to test the thing you actually need, which is a bound port, not a PID.</dd>
+            </dl>
+          </div>
+          <p>I ended up with three fixes and only the third one mattered. The ordering and the delay reduce how often it happens; the timer is what makes it not matter when it does. That's the version I'd reach for first next time: make the system self-correcting against the symptom, then reduce the cause if it's cheap.</p>
+        </div>
+      </article>
+
+      <article class="note" id="measure">
+        <div class="when">2026-08-30</div>
+        <div class="body">
+          <h2>Measure before building</h2>
+          <p>I built an AI agent on the homelab to run a weekly coursework report and post it to Notion. It took about six hours. It lasted twenty-four.</p>
+          <p>The teardown was triggered by one bug. The script that created Notion rows printed "Successfully created row" for rows that did not exist. I lost hours chasing a phantom authentication error before reading the script itself: its success check was <code>if [ $? -eq 0 ]</code> on a <code>curl</code> call. That tests whether <code>curl</code> ran, not whether the API accepted anything.</p>
+          <div class="record">
+            <dl>
+              <dt>symptom</dt>
+              <dd>Tool reports success. Rows don't exist. Hours chasing a 401 that wasn't the problem.</dd>
+              <dt>cause</dt>
+              <dd>Success was inferred from the exit code of the HTTP client, not from the response body.</dd>
+              <dt>rule</dt>
+              <dd>Any script that writes to an API checks the response, not the exit code. A tool that lies about success is worse than no tool.</dd>
+              <dt>rule</dt>
+              <dd>Verify independently when something reports success.</dd>
+            </dl>
+          </div>
+          <p>The bug was fixable. The larger problem wasn't. The agent needed constant hand-holding, and the actual job, a scheduled report, doesn't need a model at all; the script already produced readable output, and the agent was only formatting it. I'd built the interesting thing instead of the necessary thing, on an assumption about what would help, without measuring first.</p>
+          <p>The next day I installed a different agentic tool, confirmed it worked, and removed it before spending a single credit. There was no workload yet: no coursework in Notion, no syllabi, no reporter. An agent with nothing to act on is a hobby. It goes back on when there's something for it to do, and that decision now has a trigger written next to it instead of a feeling.</p>
+        </div>
+      </article>
+
+  
+    </main>
+  </div>
+  <aside class="side right">
+    <div class="side-stick">
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme"><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Dark Mode</span><span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light Mode</span></button>
+    </div>
+  </aside>
+  <footer class="site-footer">
+    <div>© 2026 Daniel Nguyen · Ottawa</div>
+    <div><a href="mailto:YOUR@EMAIL">YOUR@EMAIL</a></div>
+    <div class="icons">
+      <a href="https://github.com/Diraclol">GitHub</a>
+      <a href="https://www.linkedin.com/in/YOUR-HANDLE">LinkedIn</a>
+    </div>
+  </footer>
+</div>
+<script src="assets/theme.js"></script>
+</body>
+</html>

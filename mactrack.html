@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MacTrack — Daniel Nguyen</title>
+  <meta name="description" content="Case study: MacTrack, an offline-first Android calorie and macro tracker in Kotlin and Jetpack Compose.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side left">
+    <div class="side-stick">
+    <nav class="side-nav" aria-label="Primary">
+      <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>About Me</a>
+      <a href="/#work"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>Work</a>
+      <a href="/#projects" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6 3 12l5 6"/><path d="m16 6 5 6-5 6"/><path d="M14 4l-4 16"/></svg>Projects</a>
+      <a href="notes.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Notes</a>
+      <a href="assets/DanielNguyenResume.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h5M10 17h5"/></svg>CV</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme"><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Dark Mode</span><span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light Mode</span></button>
+    </div>
+  </aside>
+  <div class="card-col">
+    <main class="card">
+      <header class="article-header">
+        <div class="when">January 2026 – present</div>
+        <div>
+          <h1>MacTrack</h1>
+          <p class="lede">An offline-first Android calorie and macro tracker. It works with no network, ships Canadian nutrient data inside the app, and has carried my own food log through eight database migrations without losing a row.</p>
+          <p class="facts">Kotlin, Jetpack Compose, Room/SQLite, CameraX, ML Kit. Solo project, about 95 source files, tested on a Pixel 8a. <a href="https://github.com/Diraclol/MacTrack">Source</a> and <a href="https://github.com/Diraclol/MacTrack/tree/main/docs">engineering docs</a> on GitHub.</p>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+        <h2><span>Why</span><span>The problem</span></h2>
+        <p>Every calorie tracker I tried was online-first: a spinner before the food log opened, a subscription to see my own history, and a database that lived on someone else's server. I wanted the opposite. The log should open instantly on a plane, the nutrient data should be Canadian, and my history should be mine to export as a file.</p>
+        <p>So the design rule from day one was that the phone is the source of truth. A backend, if it ever exists, is a sync layer bolted on afterwards, never the foundation.</p>
+
+        <h2><span>What</span><span>What it does</span></h2>
+        <ul>
+          <li>Onboarding that computes a calorie and macro target from body stats (Mifflin–St Jeor, or Katch-McArdle when body fat is known), unit-tested against a reference calculator.</li>
+          <li>A food log by hour block with a week strip, macro pills and rings, a micronutrient box, drag-to-reorder, and swipe-to-delete.</li>
+          <li>Three-source food search: the bundled Canadian Nutrient File, the user's own foods, recipes and meals, and Open Food Facts for branded products by name or barcode, with an offline fallback.</li>
+          <li>On-device barcode scanning with CameraX and a bundled ML Kit model. No API key, no network, and a stabilisation step that requires the same code across several frames before accepting it.</li>
+          <li>Trends, weight tracking, a logging calendar with streaks, JSON backup and restore, light and dark themes.</li>
+          <li>An opt-in AI assistant that estimates macros from text or a photo and stages the result for review before anything is logged. Bring your own key; it's encrypted with a hardware-backed Android Keystore key and never leaves the device except to the model endpoint.</li>
+        </ul>
+
+        <figure class="full">
+          <div class="shots">
+            <figure>
+              <img src="assets/img/mactrack-dashboard.jpg" width="540" height="1200" alt="Dashboard with calories, protein, fat and carbs progress bars, a nutrients grid, and a 30-day logging heatmap">
+              <figcaption>Dashboard</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/mactrack-foodlog.jpg" width="540" height="1200" alt="Food log for a day, with the week strip, remaining macros, micronutrient tiles and an 11 AM entry">
+              <figcaption>Food log</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/mactrack-fooddetail.jpg" width="540" height="1200" alt="Food detail for a cereal, with macro rings, a contribution-to-remaining card, portion units and a number pad">
+              <figcaption>Food detail and portion entry</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/img/mactrack-foodsearch.jpg" width="540" height="1200" alt="Add food screen with All, Foods, Meals, Recipes and Quick tabs and a list of recent foods">
+              <figcaption>Search</figcaption>
+            </figure>
+          </div>
+        </figure>
+
+        <h2><span>Decision</span><span>The one load-bearing decision</span></h2>
+        <p>A logged entry is a <strong>frozen snapshot plus provenance</strong>. When you log 150 g of chicken, the nutrient columns are scaled and written into the entry at that moment. Editing the chicken later, or deleting it, never rewrites what you ate last Tuesday. Alongside the snapshot, each entry records where it came from: source type, source id, and the unit label. That's enough to reopen the entry, rescale it, and log it again.</p>
+        <p>The corollary is that <strong>a day is a query, not a record</strong>. Daily totals come from <code>GROUP BY date</code> over the entries. There is no daily-totals table, because a stored total would drift from the entries the first time anything was edited.</p>
+        <p>Both halves are load-bearing. Snapshots keep history honest; provenance keeps it useful. It is also why the bundled nutrient database can live entirely outside Room: logged CNF foods are reopened via provenance, not via a join.</p>
+
+        <h2><span>Hard parts</span><span>Things that were harder than they looked</span></h2>
+        <p><strong>Eight migrations, zero data loss.</strong> Android's Room library offers a one-liner that silently wipes the database when the schema doesn't match. It is banned in this codebase. Every schema change is a real, additive migration, with the exported schema JSON committed so the next migration has something to diff against. A schema-mismatch crash names the offending column in the log, and that is the debugging entry point, not a reason to uninstall.</p>
+        <p><strong>Nutrient data outside the ORM.</strong> The Canadian Nutrient File is a 2 MB read-only SQLite asset. Pulling it into Room would have coupled every future migration to a dataset I don't control, so it's opened directly, read-only, with parameterized queries, and the entity layer never assumes it can join against it.</p>
+        <p><strong>Secrets on a device you don't control.</strong> The AI feature needs an API key, and an APK is trivially decompiled. The key is the user's own, encrypted with an AES-GCM key that lives in the Android Keystore, so only ciphertext ever touches disk. No key is embedded, committed, or logged. The <a href="https://github.com/Diraclol/MacTrack/blob/main/docs/SECURITY.md">threat model</a> for this and for the planned accounts feature is written up in the repo.</p>
+
+        <h2><span>Next</span><span>What comes next</span></h2>
+        <p>Public release first. Accounts, cloud backup and a shared food database come after, on Supabase, chosen after <a href="https://github.com/Diraclol/MacTrack/blob/main/docs/BACKEND_RESEARCH.md">comparing it against Neon and Convex</a>: it supplies server-side role enforcement through Postgres row-level security, which the security model requires, with very little backend to write. The domain and data layers are kept free of Android imports so an iOS build via Compose Multiplatform stays a restructure rather than a rewrite.</p>
+
+      </div>
+  
+    </main>
+  </div>
+  <aside class="side right">
+    <div class="side-stick">
+    <button class="theme-toggle" type="button" aria-label="Toggle light or dark theme"><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Dark Mode</span><span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light Mode</span></button>
+    </div>
+  </aside>
+  <footer class="site-footer">
+    <div>© 2026 Daniel Nguyen · Ottawa</div>
+    <div><a href="mailto:YOUR@EMAIL">YOUR@EMAIL</a></div>
+    <div class="icons">
+      <a href="https://github.com/Diraclol">GitHub</a>
+      <a href="https://www.linkedin.com/in/YOUR-HANDLE">LinkedIn</a>
+    </div>
+  </footer>
+</div>
+<script src="assets/theme.js"></script>
+</body>
+</html>
