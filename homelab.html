@@ -71,7 +71,27 @@
         </table>
         <p>The OS is immutable: the base system is a read-only image, and a bad update is one <code>rpm-ostree rollback</code> away. All state lives in Compose volumes on the data drive, which is what makes the recovery runbook short.</p>
 
-        <h2><span>Incidents</span><span>Two from the log</span></h2>
+        <h2><span>Screens</span><span>What it looks like day to day</span></h2>
+      <div class="screens">
+        <figure class="span2">
+          <div class="figure-frame"><img src="assets/img/homelab-glances.jpg" width="1600" height="356" alt="Glances terminal view during a stream: CPU 24%, two GPUs, eleven containers with moonlight-web at 152% CPU and the rest near zero"></div>
+          <figcaption>Glances during a live stream: <code>moonlight-web</code> at 150% CPU encoding the desktop, the other ten containers idling. Two GPUs listed; the NVIDIA card is reserved for Ollama.</figcaption>
+        </figure>
+        <figure>
+          <div class="figure-frame"><img src="assets/img/homelab-moonlight.jpg" width="1600" height="787" alt="A desktop streamed to a browser through Moonlight Web, with the on-screen controls overlay open"></div>
+          <figcaption>The living-room TV path: the desktop streamed into a browser tab, controls overlay open. No app, no account.</figcaption>
+        </figure>
+        <figure>
+          <div class="figure-frame"><img src="assets/img/homelab-openwebui.jpg" width="1600" height="791" alt="Open WebUI chat interface served from the homelab"></div>
+          <figcaption>Open WebUI, served from the box over the HTTPS name. Local models through Ollama on the GPU, plus a bring-your-own-key cloud model for heavier questions.</figcaption>
+        </figure>
+        <figure class="span2">
+          <div class="figure-frame"><img src="assets/img/homelab-immich.jpg" width="1600" height="790" alt="A photo of a bowl of ramen open in the Immich photo viewer"></div>
+          <figcaption>Immich, the photo library: 1,100 photos and 126 videos backed up from the phone over the HTTPS name, browsed here from the desktop. Yes, that's lunch.</figcaption>
+        </figure>
+      </div>
+
+      <h2><span>Incidents</span><span>Two from the log</span></h2>
         <p>The full log is in the repo. These two are the ones I'd tell in an interview.</p>
 
         <h3>The streaming host that exited cleanly and never came back</h3>
