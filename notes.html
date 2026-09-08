@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=2">
 </head>
 <body>
 <div class="shell">
@@ -18,7 +18,7 @@
     <div class="side-stick">
     <nav class="side-nav" aria-label="Primary">
       <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>About Me</a>
-      <a href="assets/DanielNguyenResume.pdf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h5M10 17h5"/></svg>CV</a>
+      <a href="/#cv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h5M10 17h5"/></svg>Resume</a>
       <a href="/#work"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/></svg>Work</a>
       <a href="/#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6 3 12l5 6"/><path d="m16 6 5 6-5 6"/><path d="M14 4l-4 16"/></svg>Projects</a>
       <a href="notes.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Notes</a>
@@ -36,6 +36,28 @@
         </div>
       </header>
 
+      <article class="note" id="measure">
+        <div class="when">2026-08-30</div>
+        <div class="body">
+          <h2>Measure before building</h2>
+          <p>I built an AI agent on the homelab to run a weekly coursework report and post it to Notion. It took about six hours. It lasted twenty-four.</p>
+          <p>The teardown was triggered by one bug. The script that created Notion rows printed "Successfully created row" for rows that did not exist. I lost hours chasing a phantom authentication error before reading the script itself: its success check was <code>if [ $? -eq 0 ]</code> on a <code>curl</code> call. That tests whether <code>curl</code> ran, not whether the API accepted anything.</p>
+          <div class="record">
+            <dl>
+              <dt>symptom</dt>
+              <dd>Tool reports success. Rows don't exist. Hours chasing a 401 that wasn't the problem.</dd>
+              <dt>cause</dt>
+              <dd>Success was inferred from the exit code of the HTTP client, not from the response body.</dd>
+              <dt>fix</dt>
+              <dd>Check the response body, not <code>curl</code>'s exit code, and treat a missing row as a failure instead of printing success.</dd>
+              <dt>rule</dt>
+              <dd>Any script that writes to an API checks the response, not the exit code, and anything that reports success gets verified independently. A tool that lies about success is worse than no tool.</dd>
+            </dl>
+          </div>
+          <p>The bug was fixable. The larger problem wasn't. The agent needed constant hand-holding, and the actual job, a scheduled report, doesn't need a model at all; the script already produced readable output, and the agent was only formatting it. I'd built the interesting thing instead of the necessary thing, on an assumption about what would help, without measuring first.</p>
+          <p>The next day I installed a different agentic tool, confirmed it worked, and removed it before spending a single credit. There was no workload yet: no coursework in Notion, no syllabi, no reporter. An agent with nothing to act on is a hobby. It goes back on when there's something for it to do, and that decision now has a trigger written next to it instead of a feeling.</p>
+        </div>
+      </article>
       <article class="note" id="gpu">
         <div class="when">2026-08-29</div>
         <div class="body">
@@ -57,7 +79,6 @@
           <p>The lesson isn't about NVIDIA. It's that a plausible explanation stopped me from running a ten-second check. The thing I'd "verified" was one layer above the thing that mattered. Now, when something is slow, the first question is whether the component can see the resource I think it's using, and the answer has to come from inside the component.</p>
         </div>
       </article>
-
       <article class="note" id="exit-zero">
         <div class="when">2026-07-28</div>
         <div class="body">
@@ -80,29 +101,6 @@
         </div>
       </article>
 
-      <article class="note" id="measure">
-        <div class="when">2026-08-30</div>
-        <div class="body">
-          <h2>Measure before building</h2>
-          <p>I built an AI agent on the homelab to run a weekly coursework report and post it to Notion. It took about six hours. It lasted twenty-four.</p>
-          <p>The teardown was triggered by one bug. The script that created Notion rows printed "Successfully created row" for rows that did not exist. I lost hours chasing a phantom authentication error before reading the script itself: its success check was <code>if [ $? -eq 0 ]</code> on a <code>curl</code> call. That tests whether <code>curl</code> ran, not whether the API accepted anything.</p>
-          <div class="record">
-            <dl>
-              <dt>symptom</dt>
-              <dd>Tool reports success. Rows don't exist. Hours chasing a 401 that wasn't the problem.</dd>
-              <dt>cause</dt>
-              <dd>Success was inferred from the exit code of the HTTP client, not from the response body.</dd>
-              <dt>rule</dt>
-              <dd>Any script that writes to an API checks the response, not the exit code. A tool that lies about success is worse than no tool.</dd>
-              <dt>rule</dt>
-              <dd>Verify independently when something reports success.</dd>
-            </dl>
-          </div>
-          <p>The bug was fixable. The larger problem wasn't. The agent needed constant hand-holding, and the actual job, a scheduled report, doesn't need a model at all; the script already produced readable output, and the agent was only formatting it. I'd built the interesting thing instead of the necessary thing, on an assumption about what would help, without measuring first.</p>
-          <p>The next day I installed a different agentic tool, confirmed it worked, and removed it before spending a single credit. There was no workload yet: no coursework in Notion, no syllabi, no reporter. An agent with nothing to act on is a hobby. It goes back on when there's something for it to do, and that decision now has a trigger written next to it instead of a feeling.</p>
-        </div>
-      </article>
-
   
     </main>
   </div>
@@ -120,6 +118,6 @@
     </div>
   </footer>
 </div>
-<script src="assets/theme.js"></script>
+<script src="assets/theme.js?v=2"></script>
 </body>
 </html>
