@@ -4,13 +4,14 @@ Personal site: [junguyen.me](https://junguyen.me). Who I am, where I've worked, 
 building, and short write-ups from my homelab incident log.
 
 Static HTML and one hand-written stylesheet. No framework, no build step, no JavaScript beyond the
-theme toggle. Deployed to GitHub Pages by a pinned Actions workflow on every push to `main`.
+theme toggle and the resume/CV switcher. Deployed to GitHub Pages by a pinned Actions workflow on
+every push to `main`.
 
 ## Pages
 
 | File | What |
 |---|---|
-| `index.html` | About, CV, work, projects, notes index |
+| `index.html` | About, resume & CV, work, projects, notes index |
 | `mactrack.html` | Case study — MacTrack, an offline-first Android nutrition tracker |
 | `homelab.html` | Case study — self-hosted infrastructure on a repurposed laptop |
 | `notes.html` | Three incident write-ups: symptom, cause, fix, rule |

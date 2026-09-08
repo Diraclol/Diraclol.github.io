@@ -223,6 +223,36 @@ small { font-size: var(--t-s); }
 .how-i-work { padding-top: 2rem; }
 .how-i-work .kicker { text-align: center; color: var(--muted); font-size: var(--t-s); margin-bottom: 0.75rem; }
 
+/* resume / CV switcher — same font, weight and tracking as .theme-toggle,
+   colours from the tokens so it follows dark mode with everything else.
+   Hidden until theme.js wires it up: with no JS the resume embed and both
+   download links still render, so there are no dead controls. */
+.doc-toggle {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+.doc-toggle[hidden] { display: none; }
+.doc-toggle button {
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 0.45rem 1.4rem;
+  cursor: pointer;
+}
+.doc-toggle button:first-child { border-radius: 999px 0 0 999px; }
+.doc-toggle button:last-child { border-radius: 0 999px 999px 0; margin-left: -1px; }
+.doc-toggle button:hover { color: var(--ink); }
+.doc-toggle button[aria-pressed="true"] {
+  background: var(--frame);
+  border-color: var(--frame);
+  color: #fff;
+}
+
 /* resume embed */
 .cv-embed { max-width: 52rem; margin: 0 auto 1rem; border: 1px solid var(--rule); background: #fff; }
 .cv-embed object { display: block; width: 100%; height: 42rem; }
