@@ -268,7 +268,6 @@ small { font-size: var(--t-s); }
 /* resume embed */
 .cv-embed { max-width: 52rem; margin: 0 auto 1rem; border: 1px solid var(--rule); background: #fff; }
 .cv-embed object { display: block; width: 100%; height: 42rem; }
-.cv-download { text-align: center; }
 
 /* project showcase: image centered, caption above */
 .showcase { text-align: center; max-width: 40rem; margin: 0 auto 2.75rem; }
