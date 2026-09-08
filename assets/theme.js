@@ -17,8 +17,9 @@
   });
 })();
 
-// Resume / CV switcher in the "Resume & CV" section. Enhancement only: with
-// this file absent the resume embed and both download links still render.
+// Resume / CV switcher in the "Resume & CV" section. The pill is always in
+// the markup; with this file absent the resume embed and both download links
+// still render, the buttons just don't switch.
 (function () {
   var FRAGMENT = '#toolbar=0&navpanes=0&pagemode=none&view=FitH';
   var DOCS = {
@@ -59,6 +60,5 @@
         show(btn.dataset.doc);
       });
     });
-    toggle.hidden = false;
   });
 })();
