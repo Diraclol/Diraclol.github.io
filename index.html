@@ -36,7 +36,8 @@
           <a href="mailto:dnguy038@uottawa.ca">Email</a>
         </p>
         <p class="lede">Third-year computer engineering co-op student at the University of Ottawa. This summer I did integration engineering at Teldio. On my own time I built MacTrack, an offline-first Android nutrition tracker, and I run a small self-hosted homelab that I treat like production.</p>
-        <p class="seeking">Looking for a Winter 2027 co-op (January start) in software or infrastructure, in Ottawa or Toronto.</p>
+        <p class="seeking">Looking for a Winter 2027 co-op (January start, 4 to 12 months) in software, infrastructure, or hardware verification, in Ottawa or Toronto.</p>
+        <p class="now">This term: Digital Systems II (VHDL, FPGA) and Computer Architecture II. On the side: porting my Spotify controller firmware to C on ESP-IDF, learning Rust, and building an MCP server for the homelab.</p>
       </section>
 
       <section class="how-i-work" aria-labelledby="hiw">
@@ -67,6 +68,7 @@
             <p style="padding:1.5rem;text-align:center">Your browser can't display the PDF inline. <a href="assets/DanielNguyenResume.pdf">Open the resume</a>.</p>
           </object>
         </div>
+        <p class="cv-download">Download: <a href="assets/DanielNguyenResume.pdf" download>Resume (PDF)</a> · <a href="assets/DanielNguyenCV.pdf" download>CV (PDF)</a></p>
       </section>
 
       <section class="section" id="work">
@@ -75,9 +77,13 @@
         <article class="entry">
           <h3>Intern Solutions Engineer (Co-op), Teldio</h3>
           <p class="meta">May – August 2026 · Ottawa</p>
-          <p>Teldio builds event-driven middleware that connects physical-security and operations systems to two-way radio and fleet software. The resume above lists what I shipped. This is the part that doesn't fit on one page.</p>
-          <p>Most of the term came down to one recurring constraint. An integration can only be trusted against the real system, and the field hardware on the other end of it — panels, radios, alarm equipment — doesn't virtualize. The server platforms I could stand up as VMs; the hardware I couldn't, so every test queued behind physical access to one bench. That queue is what Project Echo was built to remove: it records live protocol traffic off a module and replays it as test input, so a module can be exercised against a recording of the real thing instead of the thing itself. It outlived my term, which I care about more than any single integration I shipped.</p>
-          <p>The habit that actually mattered was refusing to trust one interface until a second one agreed with it. Bridging a vendor's .NET SDK into Go was only defensible because I could diff its events against the same vendor's REST API and show they were byte-identical. The defects worth finding were the same story from the other direction: they were invisible until two live things disagreed, and none of them would have surfaced against a mock.</p>
+          <p>Teldio builds event-driven middleware that connects physical-security and operations systems to two-way radio and fleet software.</p>
+          <ul>
+            <li>Designed and built an internal capture-and-replay testing tool that records live protocol traffic from integration modules and replays it as automated test input, so QA can validate modules without physical hardware on the bench. It's still in use after my term.</li>
+            <li>Contributed to five integration surfaces across access-control and intrusion-detection platforms, taking work from research through proof of concept, live validation, and handoff to R&amp;D.</li>
+            <li>Bridged a vendor .NET SDK into Go modules and verified it emitted output identical to the vendor's REST API, validated against two live system versions.</li>
+            <li>Debugged protocol- and integration-level defects that only showed up against live systems, including an MQTT conformance issue reported upstream to the vendor.</li>
+          </ul>
           <p class="aside">My end-of-term review described the work as performed at the level of a junior solutions engineer rather than an intern. Details are kept general here because the specifics are Teldio's.</p>
         </article>
 
@@ -110,7 +116,7 @@
             <tr><td>2026</td><td><strong>Homelab</strong> Self-hosted infrastructure, incident log included</td><td><a href="https://github.com/Diraclol/Homelab">Repo</a> · <a href="homelab.html">Case study</a></td></tr>
             <tr><td>2026</td><td><strong>Project Echo</strong> Protocol capture-and-replay tester — internal QA tool, Teldio co-op</td><td>Internal</td></tr>
             <tr><td>2026</td><td><strong>This site</strong> Hand-written HTML/CSS, GitHub Pages</td><td><a href="https://github.com/Diraclol/Diraclol.github.io">Repo</a></td></tr>
-            <tr><td>2025</td><td><strong>Spotify Mini Controller</strong> MicroPython/C firmware driving a hardware button matrix against the Spotify Web API</td><td>—</td></tr>
+            <tr><td>2025</td><td><strong>Spotify Mini Controller</strong> ESP32 controller: soldered button matrix, Wi-Fi, Spotify Web API; firmware being ported to C on ESP-IDF</td><td>—</td></tr>
             <tr><td>2025</td><td><strong>OTAMS</strong> Tutoring appointment system — Android, Java, Firebase. SEG2105 group project</td><td><a href="https://github.com/Diraclol/OTAMS">Repo</a></td></tr>
           </tbody>
         </table>

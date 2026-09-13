@@ -13,7 +13,7 @@ every push to `main`.
 |---|---|
 | `index.html` | About, resume & CV, work, projects, notes index |
 | `mactrack.html` | Case study — MacTrack, an offline-first Android nutrition tracker |
-| `homelab.html` | Case study — self-hosted infrastructure on a repurposed laptop |
+| `homelab.html` | Case study — self-hosted infrastructure on a repurposed laptop, incidents and what's queued next |
 | `notes.html` | Three incident write-ups: symptom, cause, fix, rule |
 
 ## Design
