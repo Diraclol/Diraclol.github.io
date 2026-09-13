@@ -20,7 +20,8 @@ every push to `main`.
 
 A light content card on a cobalt page, black sidebars, IBM Plex Mono throughout, centered section
 headings. Dark mode follows the OS until the toggle pins a choice. Everything visual is a token at
-the top of `assets/style.css`; `--frame` recolours the whole page.
+the top of `assets/style.css`; `--frame` recolours the whole page, and `--fill` is the darker blue
+used wherever white text sits on a solid block (table headers, the active resume/CV pill).
 
 ## Running locally
 

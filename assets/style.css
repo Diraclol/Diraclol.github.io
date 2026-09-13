@@ -7,6 +7,7 @@
 
 :root {
   --frame: #4f7fb5;          /* the page colour behind the card (MacTrack cobalt) */
+  --fill: #3a6394;           /* solid blue under white text: table headers, active pill */
   --side: #0a0a0a;           /* sidebars + footer */
   --side-ink: #f2f2f2;
   --paper: #f4f5f7;          /* the card */
@@ -41,6 +42,7 @@
   --link: #7fb8f0;
   --link-ink: #a9d0f7;
   --frame: #2f4f74;
+  --fill: #2f4f74;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,6 +55,7 @@
     --link: #7fb8f0;
     --link-ink: #a9d0f7;
     --frame: #2f4f74;
+    --fill: #2f4f74;
   }
 }
 
@@ -264,7 +267,7 @@ small { font-size: var(--t-s); }
   cursor: pointer;
 }
 .doc-toggle button:hover { color: var(--ink); }
-.doc-toggle button[aria-pressed="true"] { background: var(--frame); color: #fff; }
+.doc-toggle button[aria-pressed="true"] { background: var(--fill); color: #fff; }
 
 /* resume embed */
 .cv-embed { max-width: 52rem; margin: 0 auto 1rem; border: 1px solid var(--rule); background: #fff; }
@@ -281,7 +284,7 @@ small { font-size: var(--t-s); }
 
 /* tables */
 table { border-collapse: collapse; width: 100%; font-size: var(--t-s); margin: 0 auto 1rem; }
-th { background: var(--frame); color: #fff; text-align: left; padding: 0.55rem 0.7rem; font-weight: 700; }
+th { background: var(--fill); color: #fff; text-align: left; padding: 0.55rem 0.7rem; font-weight: 700; }
 td { padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
 tbody tr:nth-child(odd) td { background: var(--well); }
 .all-projects { max-width: 54rem; }
