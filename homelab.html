@@ -41,7 +41,7 @@
 
         <figure class="full">
           <div class="figure-frame">
-            <img src="assets/img/homelab-dashboard.jpg" width="1600" height="789" alt="The homelab dashboard: CPU, memory, GPU, NVMe and SATA storage, Wi-Fi and Ethernet panels above the services — Glances, Dockge, Immich with 1,088 photos and 126 videos, Open WebUI with two models, Sunshine and Moonlight Web">
+            <img src="assets/img/homelab-dashboard.jpg" width="1600" height="789" alt="The homelab dashboard: CPU, memory, GPU, NVMe and SATA storage, Wi-Fi and Ethernet panels above the services — Glances, Dockge, Immich with 1,088 photos and 126 videos, FileBrowser, FreeLLMAPI, and Moonlight Web">
           </div>
           <figcaption>The dashboard, served by Homepage. An i5-8300H with 24 GB of RAM and a 2 GB GTX 1050, a 1 TB data drive, and the services that run on it.</figcaption>
         </figure>
@@ -64,6 +64,7 @@
             <tr><td>immich</td><td>Immich, Postgres, Redis, ML</td><td>Photo library, replacing a cloud subscription. Phone backs up over the HTTPS name.</td></tr>
             <tr><td>filebrowser</td><td>FileBrowser</td><td>Web‑based file manager for uploads and Claude‑generated files.</td></tr>
             <tr><td>freellmapi</td><td>FreeLLMAPI</td><td>Free‑tier LLM router/gateway with context handoff.</td></tr>
+            <tr><td>openwebui</td><td>Open WebUI</td><td>Local LLM chat interface served over HTTPS.</td></tr>
             <tr><td>homepage</td><td>Homepage</td><td>The dashboard above, with live service health.</td></tr>
             <tr><td>dockge</td><td>Dockge</td><td>Compose stack management from a browser.</td></tr>
             <tr><td>glances</td><td>Glances</td><td>Host metrics.</td></tr>
@@ -76,7 +77,7 @@
       <div class="screens">
         <figure class="span2">
           <div class="figure-frame"><img src="assets/img/homelab-glances.jpg" width="1600" height="356" alt="Glances terminal view during a stream: CPU 24%, two GPUs, eleven containers with moonlight-web at 152% CPU and the rest near zero"></div>
-          <figcaption>Glances during a live stream: <code>moonlight-web</code> at 150% CPU encoding the desktop, the other ten containers idling. Two GPUs listed; the NVIDIA card is reserved for Ollama.</figcaption>
+          <figcaption>Glances during a live stream: <code>moonlight-web</code> at 150% CPU encoding the desktop, the other containers idling. Two GPUs listed; the NVIDIA card is reserved for inference.</figcaption>
         </figure>
         <figure>
           <div class="figure-frame"><img src="assets/img/homelab-moonlight.jpg" width="1600" height="787" alt="A desktop streamed to a browser through Moonlight Web, with the on-screen controls overlay open"></div>
@@ -84,7 +85,7 @@
         </figure>
         <figure>
           <div class="figure-frame"><img src="assets/img/homelab-openwebui.jpg" width="1600" height="791" alt="Open WebUI chat interface served from the homelab"></div>
-          <figcaption>Open WebUI, served from the box over the HTTPS name. Local models through Ollama on the GPU, plus a bring-your-own-key cloud model for heavier questions.</figcaption>
+          <figcaption>Open WebUI, the local LLM chat interface served over HTTPS. Models run via FreeLLMAPI gateway with context handoff.</figcaption>
         </figure>
         <figure class="span2">
           <div class="figure-frame"><img src="assets/img/homelab-immich.jpg" width="1600" height="790" alt="A photo of a bowl of ramen open in the Immich photo viewer"></div>
