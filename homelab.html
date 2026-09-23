@@ -62,7 +62,8 @@
           <tbody>
             <tr><td>caddy</td><td>Caddy, custom build</td><td>Reverse proxy and wildcard TLS. Built with <code>xcaddy</code> because the prebuilt image drops privileges and can't bind 443.</td></tr>
             <tr><td>immich</td><td>Immich, Postgres, Redis, ML</td><td>Photo library, replacing a cloud subscription. Phone backs up over the HTTPS name.</td></tr>
-            <tr><td>ai</td><td>Ollama, Open WebUI</td><td>Local LLM inference on the GPU. See the incident below.</td></tr>
+            <tr><td>filebrowser</td><td>FileBrowser</td><td>Web‑based file manager for uploads and Claude‑generated files.</td></tr>
+            <tr><td>freellmapi</td><td>FreeLLMAPI</td><td>Free‑tier LLM router/gateway with context handoff.</td></tr>
             <tr><td>homepage</td><td>Homepage</td><td>The dashboard above, with live service health.</td></tr>
             <tr><td>dockge</td><td>Dockge</td><td>Compose stack management from a browser.</td></tr>
             <tr><td>glances</td><td>Glances</td><td>Host metrics.</td></tr>
@@ -88,6 +89,10 @@
         <figure class="span2">
           <div class="figure-frame"><img src="assets/img/homelab-immich.jpg" width="1600" height="790" alt="A photo of a bowl of ramen open in the Immich photo viewer"></div>
           <figcaption>Immich, the photo library: 1,100 photos and 126 videos backed up from the phone over the HTTPS name, browsed here from the desktop. Yes, that's lunch.</figcaption>
+        </figure>
+        <figure>
+          <div class="figure-frame"><img src="assets/img/filebrowserui.png" width="1920" height="1000" alt="FileBrowser web interface showing the file manager with uploads and claude-output folders"></div>
+          <figcaption>FileBrowser, the web‑based file manager for uploads and Claude‑generated files. Served at <code>filebrowser.fx504.duckdns.org</code> behind Caddy TLS.</figcaption>
         </figure>
       </div>
 
